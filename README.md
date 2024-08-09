@@ -65,10 +65,11 @@ INFO:    Downloading shub image
 
 ## Build image
 
-Apptainer version 1.2.0:
+Apptainer version 1.3.3:
 
 ```bash
-$ docker build --build-arg APPTAINER_COMMITISH=v1.2.0 -t apptainer:1.2.0 .
+$ docker build --build-arg APPTAINER_COMMITISH=v1.3.3 -t apptainer:1.3.3 .
+docker build --build-arg APPTAINER_COMMITISH=v1.3.3 -t apptainer:1.3.3 -f Dockerfile .
 ```
 
 Bleeding-edge (main branch):
