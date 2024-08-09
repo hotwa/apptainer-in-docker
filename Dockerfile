@@ -1,4 +1,4 @@
-FROM golang:1.20.6-alpine3.18 as builder
+FROM golang:1.21.13-alpine3.20 as builder
 
 RUN apk add --no-cache \
         # Required for apptainer to find min go version
@@ -37,3 +37,4 @@ RUN apk add --no-cache ca-certificates libseccomp squashfs-tools tzdata \
     && rm -rf /tmp/* /var/cache/apk/*
 WORKDIR /work
 ENTRYPOINT ["/usr/local/apptainer/bin/apptainer"]
+# docker build --build-arg APPTAINER_COMMITISH=v1.3.3 -t apptainer:1.3.3 -f Dockerfile.apptainer .
