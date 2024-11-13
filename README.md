@@ -83,6 +83,26 @@ $ docker build --build-arg APPTAINER_COMMITISH=main -t apptainer:latest .
 ```shell
 docker build --build-arg APPTAINER_COMMITISH=v1.3.5 -t apptainer:1.3.5 -f Dockerfile .
 docker pull brandonsoubasis/alphafold3:latest
- docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/work \
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/work \
     apptainer:1.3.5 build alphafold3.sif docker-daemon://brandonsoubasis/alphafold3:latest
+```
+
+### test sif file
+
+```shell
+singularity exec --nv alphafold3.sif sh -c 'nvidia-smi'
+singularity exec --nv alphafold3.sif <<args>>
+singularity exec \
+     --nv alphafold3.sif \
+     --bind $HOME/af_input:/root/af_input \
+     --bind $HOME/af_output:/root/af_output \
+     --bind <MODEL_PARAMETERS_DIR>:/root/models \
+     --bind <DATABASES_DIR>:/root/public_databases \
+python alphafold3/run_alphafold.py \
+     --json_path=/root/af_input/fold_input.json \
+     --model_dir=/root/models \
+     --db_dir=/root/public_databases \
+     --output_dir=/root/af_output
+# test apptainer in docker 
+docker run --gpus all --rm --privileged -v $(pwd):/work apptainer:1.3.5 run /work/alphafold3.sif --nv sh -c 'nvidia-smi'
 ```
