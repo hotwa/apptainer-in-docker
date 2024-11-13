@@ -65,15 +65,24 @@ INFO:    Downloading shub image
 
 ## Build image
 
-Apptainer version 1.3.3:
+Apptainer version 1.3.5:
 
 ```bash
-$ docker build --build-arg APPTAINER_COMMITISH=v1.3.3 -t apptainer:1.3.3 .
-docker build --build-arg APPTAINER_COMMITISH=v1.3.3 -t apptainer:1.3.3 -f Dockerfile .
+$ docker build --build-arg APPTAINER_COMMITISH=v1.3.5 -t apptainer:1.3.5 .
+docker build --build-arg APPTAINER_COMMITISH=v1.3.5 -t apptainer:1.3.5 -f Dockerfile .
 ```
 
 Bleeding-edge (main branch):
 
 ```bash
 $ docker build --build-arg APPTAINER_COMMITISH=main -t apptainer:latest .
+```
+
+## tranformer alphafold3 docker images to sif in slurm to run
+
+```shell
+docker build --build-arg APPTAINER_COMMITISH=v1.3.5 -t apptainer:1.3.5 -f Dockerfile .
+docker pull brandonsoubasis/alphafold3:latest
+ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/work \
+    apptainer:1.3.5 build alphafold3.sif docker-daemon://brandonsoubasis/alphafold3:latest
 ```
