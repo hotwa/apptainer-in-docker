@@ -105,4 +105,45 @@ python alphafold3/run_alphafold.py \
      --output_dir=/root/af_output
 # test apptainer in docker 
 docker run --gpus all --rm --privileged -v $(pwd):/work apptainer:1.3.5 run /work/alphafold3.sif --nv sh -c 'nvidia-smi'
+apptainer exec alphafold3.sif /bin/bash  # 进入容器
+ls /  # 列出根目录
+ls /path/to/some/directory  # 查看是否有代码文件在容器内
 ```
+
+## install apptainer in ubuntu22.04
+
+```shell
+# Ensure repositories are up-to-date
+sudo apt-get update
+# Install debian packages for dependencies
+sudo apt-get install -y \
+    build-essential \
+    libseccomp-dev \
+    pkg-config \
+    uidmap \
+    squashfs-tools \
+    fakeroot \
+    cryptsetup \
+    tzdata \
+    dh-apparmor \
+    curl wget git
+sudo apt-get install -y libsubid-dev
+export GOVERSION=1.21.13 OS=linux ARCH=amd64
+wget -O /tmp/go${GOVERSION}.${OS}-${ARCH}.tar.gz \
+  https://dl.google.com/go/go${GOVERSION}.${OS}-${ARCH}.tar.gz
+sudo tar -C /usr/local -xzf /tmp/go${GOVERSION}.${OS}-${ARCH}.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+source ~/.bashrc
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
+echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
+source ~/.bashrc
+git clone https://github.com/apptainer/apptainer.git
+cd apptainer
+git checkout v1.3.5
+./mconfig
+cd $(/bin/pwd)/builddir
+make
+sudo make install
+```
+
+
